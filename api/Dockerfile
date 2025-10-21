@@ -1,18 +1,14 @@
 FROM python:alpine
 
-COPY requirements.txt /temp/
+COPY requirements.txt /temp/requirements.txt
+COPY app /app
 
-WORKDIR /service
+WORKDIR /app
 
 EXPOSE 8000
 
 RUN pip install -r /temp/requirements.txt
 
-COPY . .
+RUN adduser --disabled-password app-user
 
-RUN adduser --disabled-password service-user
-
-USER service-user
-
-
-# CMD [ "npm", "run", "dev" ]
+USER app-user
