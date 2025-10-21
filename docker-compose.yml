@@ -2,9 +2,27 @@ services:
   api:
     build:
       context: ./api
+    restart: always
     ports:
       - "8000:8000"
     volumes:
       - ./api/app:/app
+    environment:
+      - DB_HOST=database
+      - DB_NAME=dbname
+      - DB_USER=dbuser
+      - DB_PASS=pass
+
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
+
+    depends_on:
+      - database
+
+  database:
+    image: postgres:alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=dbname
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=pass
